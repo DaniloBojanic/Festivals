@@ -42,7 +42,7 @@ import finale.security.TokenUtils;
 import finale.service.UserService;
 
 @RestController
-@RequestMapping(value = "/api/korisnici", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 	
 	@Autowired

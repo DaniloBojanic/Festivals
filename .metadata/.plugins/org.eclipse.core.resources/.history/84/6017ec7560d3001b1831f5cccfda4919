@@ -1,0 +1,53 @@
+package finale.controller;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import festivali.model.Rezervacija;
+import festivali.web.dto.RezervacijaDTO;
+import finale.service.ReservationService;
+import finale.support.ReservationDTOToReservation;
+import finale.support.ReservationToReservationDTO;
+
+@RestController
+@RequestMapping(value = "/api/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
+public class ReservationController {
+	
+	@Autowired
+	private ReservationService reservationService;
+	
+	@Autowired
+	private ReservationDTOToReservation toReservation;
+	
+	@Autowired
+	private ReservationToReservationDTO toReservationDTO;
+	
+	//@PreAuthorize("hasRole('KORISNIK')")
+	@GetMapping(value="/{id}")
+	public ResponseEntity<RezervacijaDTO> getOne(@PathVariable Long id){
+		Rezervacija rez = rezervacijaService.getOne(id);
+		
+		return new ResponseEntity<>(toRezervacijaDTO.convert(rez),HttpStatus.OK);
+	}
+	
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RezervacijaDTO> create(@Valid @RequestBody RezervacijaDTO rezervacijaDTO){
+		Rezervacija rezervacija = toRezervacija.convert(rezervacijaDTO);
+		
+				
+		Rezervacija rezervisana = rezervacijaService.rezervisi(rezervacija);
+		
+		return new ResponseEntity<>(toRezervacijaDTO.convert(rezervisana),HttpStatus.CREATED);
+	}
+
+}
