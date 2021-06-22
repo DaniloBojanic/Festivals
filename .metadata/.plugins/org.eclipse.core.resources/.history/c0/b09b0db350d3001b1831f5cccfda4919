@@ -1,0 +1,10 @@
+package finale.service;
+
+import finale.model.Reservation;
+
+public interface ReservationService {
+
+	Reservation getOne(Long id);
+
+	Reservation rezervisi(Reservation reservation);
+}
