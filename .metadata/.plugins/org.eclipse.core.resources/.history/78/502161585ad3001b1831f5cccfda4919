@@ -58,12 +58,12 @@ public class Festival {
 		this.name = name;
 	}
 
-	public LocalDate getDateStart() {
+	public LocalDate getDateBeginig() {
 		return dateStart;
 	}
 
-	public void setDateStart(LocalDate dateStart) {
-		this.dateStart = dateStart;
+	public void setDateBeginig(LocalDate dateBeginig) {
+		this.dateStart = dateBeginig;
 	}
 
 	public LocalDate getDateEnd() {
