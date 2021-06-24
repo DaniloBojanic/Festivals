@@ -5,7 +5,7 @@ import { Navbar, Nav, Container,Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/login/Login"
 import {logout} from './services/auth'
-// import Festival from './components/festival/Festival';
+import Festival from './components/festival/Festival';
 // import CreateFestival from './components/festival/CreateFestival';
 // import Reservation from './components/reservation/Reservation;
 import { Provider } from "react-redux";
@@ -30,8 +30,8 @@ class App extends React.Component {
              
               
               <Nav>
-                <Nav.Link as={Link} to="/festivali">
-                  Prikaz festivala
+                <Nav.Link as={Link} to="/festivals">
+                  Festivals
                 </Nav.Link>
                
                 {window.localStorage['jwt'] ? 
@@ -44,9 +44,9 @@ class App extends React.Component {
                 <Switch>
                   
                 <Route exact path="/login" component={Login}/>
-                {/* <Route exact path="/festival" component={Festival}/>
-                <Route exact path="/festival/create" component={CreateFestival}/>
-                <Route exact path="/festival/reserve/:id" component={Reservation}/> */}
+                 <Route exact path="/festivals" component={Festival}/>
+                {/* <Route exact path="/festival/create" component={CreateFestival}/> */}
+                {/* <Route exact path="/festival/reserve/:id" component={Reservation}/> */} 
 
                 
                   

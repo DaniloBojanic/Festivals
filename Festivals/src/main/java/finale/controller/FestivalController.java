@@ -41,7 +41,7 @@ public class FestivalController {
 	@Autowired
 	private FestivalDTOtoFestival toFestival;
 	
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@GetMapping
 	public ResponseEntity<List<FestivalDTO>> getAll(@RequestParam(defaultValue = "0") int pageNo){
 		Page<Festival> svi = festivalService.findAll(pageNo);

@@ -26,7 +26,7 @@ public class PlaceController {
 	@Autowired
 	private PlaceToPlaceDTO toPlaceDTO;
 	
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@GetMapping
 	public ResponseEntity<List<PlaceDTO>> getAll(){
 		List<Place> mesta = placeService.findAll();
