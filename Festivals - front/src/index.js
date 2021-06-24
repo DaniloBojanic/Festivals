@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/login/Login"
 import {logout} from './services/auth'
 import Festival from './components/festival/Festival';
-// import CreateFestival from './components/festival/CreateFestival';
+import CreateFestival from './components/festival/CreateFestival';
 // import Reservation from './components/reservation/Reservation;
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -45,7 +45,7 @@ class App extends React.Component {
                   
                 <Route exact path="/login" component={Login}/>
                  <Route exact path="/festivals" component={Festival}/>
-                {/* <Route exact path="/festival/create" component={CreateFestival}/> */}
+                <Route exact path="/festivals/create" component={CreateFestival}/>
                 {/* <Route exact path="/festival/reserve/:id" component={Reservation}/> */} 
 
                 
