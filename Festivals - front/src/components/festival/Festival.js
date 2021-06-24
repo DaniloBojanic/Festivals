@@ -37,11 +37,14 @@ class Festival extends React.Component {
                
             },
           }
+
         Axios.get('/festivals', config)
             .then(res => {
                  // handle success
                  console.log(res);
-                 this.setState({festivals: res.data,  totalPages : res.headers["total-pages"]});
+                 this.setState({pageNo : pageNo,
+                     festivals: res.data, 
+                      totalPages : res.headers["total-pages"]});
             })
             .catch(error => {
                 // handle error
@@ -65,13 +68,14 @@ class Festival extends React.Component {
     }
 
     renderPlacesOptions() {
-        return this.state.places.map(place => {
-            return (
-                <option key={place.id} value={place.id}>
-                    {place.city} , {place.country}
-                </option>
-            )
-        });
+        <option value={-1}></option>
+        {this.state.places.map((place) => {
+          return (
+            <option value={place.id} key={place.id}>
+              {place.city}
+            </option>
+          );
+        })}
     }
 
     placeChange(e,id,name,dateStart,dateEnd,ticketPrice,availableTickets){
@@ -93,7 +97,7 @@ class Festival extends React.Component {
                 
     }
 
-    nazivInputChanged(e) {
+    nameInputChanged(e) {
         let input = e.target;
     
         let name = input.name;
@@ -165,7 +169,14 @@ class Festival extends React.Component {
                   <td><InputGroup>
                     <Form.Control as="select" id="place" value={festival.place.id} name="place" onChange={e=> this.placeChange(e,festival.id,festival.name,festival.dateStart,festival.dateEnd,festival.ticketPrice,festival.availableTickets)}>
                         
-                        {this.renderPlacesOptions()}
+                    <option value={-1}></option>
+          {this.state.places.map((place) => {
+            return (
+              <option value={place.id} key={place.id}>
+                {place.city}
+              </option>
+            );
+          })}
                     </Form.Control>
                     </InputGroup></td>
                   <td>{festival.dateStart}</td>
@@ -201,7 +212,7 @@ class Festival extends React.Component {
         Axios.put('/festivals/' + id, festivalDTO)
         .then(res => {
             console.log(res);
-    
+            alert('Festival location successfully edited');
             window.location.reload()
             
         })
@@ -223,22 +234,29 @@ class Festival extends React.Component {
                 <Form>
                     <Form.Label  htmlFor="place">Place of event</Form.Label>
                     <InputGroup>
-                    <Form.Control as="select" id="place" name="placeId" onChange={e=> this.placeSelectionChanged(e)}
+                    <Form.Control as="select" id="place" name="placeId" onChange={(e)=> this.placeSelectionChanged(e)}
                     onClick={e => this.search()}>
+                       <option value={-1}></option>
+                         {this.state.places.map((place) => {
+                         return (
+                            <option value={place.id} key={place.id}>
+                             {place.city}, {place.country}
+                      </option>
+                                  );
+                                  })} 
                        
-                        {this.renderPlacesOptions()}
                     </Form.Control>
                     </InputGroup>
 
                     <Form.Label htmlFor="name">Name</Form.Label>
-                    <Form.Control id="name" placeHolder="name of festival" name="name" onChange={e=> this.nameInputChanged(e)}></Form.Control>
+                    <Form.Control id="name" placeholder="name of festival" name="name" onChange={e=> this.nameInputChanged(e)}></Form.Control>
                 </Form>
                 <br/>
             </div>
              
              <Button variant="success" onClick={(e) => this.goToCreate()}>Create festival</Button>
-             <div style={{float:"right"}}><Button disabled={this.state.pageNo==0} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo = this.state.pageNo - 1)}>Previous</Button>
-                        <Button disabled={this.state.pageNo==this.state.totalPages-1} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo = this.state.pageNo + 1)}>Next</Button>
+             <div style={{float:"right"}}><Button disabled={this.state.pageNo==0} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo - 1)}>Previous</Button>
+                        <Button disabled={this.state.pageNo==this.state.totalPages-1} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo + 1)}>Next</Button>
   </div>
             <Table className="table table-striped" style={{marginTop:5}}>
                 <thead className="thead-dark">
