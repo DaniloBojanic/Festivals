@@ -1,5 +1,0 @@
-package finale.service;
-
-public interface PlaceService {
-
-}

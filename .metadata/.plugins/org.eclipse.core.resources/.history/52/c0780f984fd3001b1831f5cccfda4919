@@ -1,5 +1,0 @@
-package finale.repository;
-
-public interface FestivalRepository {
-
-}

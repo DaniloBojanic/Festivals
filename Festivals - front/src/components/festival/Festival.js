@@ -75,6 +75,17 @@ class Festival extends React.Component {
             });
     }
 
+    renderPlacesOptions() {
+        <option value={-1}></option>
+        {this.state.places.map((place) => {
+          return (
+            <option value={place.id} key={place.id}>
+              {place.city}
+            </option>
+          );
+        })}
+    }
+
     placeChange(e,id,name,dateStart,dateEnd,ticketPrice,availableTickets){
         this.placeSelectionChanged(e);
         this.edit(id,name,dateStart,dateEnd,ticketPrice,availableTickets);
