@@ -1,6 +1,5 @@
 package finale.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -21,5 +20,5 @@ public interface FestivalService {
 
 	Festival delete(Long id);
 
-	List<Festival> find(Long placeId, String name);
+	Page<Festival> search(String name, Long placeId, int pageNo);
 }

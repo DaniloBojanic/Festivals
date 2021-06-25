@@ -21,7 +21,8 @@ class Festival extends React.Component {
 
         this.state = {festival : festival,
             places: [], festivals: [], 
-            pageNo : 0,totalPages : 0,
+            search: {name:"", placeId: null},
+            pageNo: 0, totalPages: 0,
             placeId : null, name : "" }
     }
 
@@ -38,11 +39,18 @@ class Festival extends React.Component {
             },
           }
 
+        if (this.state.search.name != "") {
+            config.params.name = this.state.search.name;
+        }  
+        if (this.state.search.placeId != null) {
+            config.params.placeId = this.state.search.placeId;
+        }
+
         Axios.get('/festivals', config)
             .then(res => {
                  // handle success
                  console.log(res);
-                 this.setState({pageNo : pageNo,
+                 this.setState({
                      festivals: res.data, 
                       totalPages : res.headers["total-pages"]});
             })
@@ -67,78 +75,27 @@ class Festival extends React.Component {
             });
     }
 
-    renderPlacesOptions() {
-        <option value={-1}></option>
-        {this.state.places.map((place) => {
-          return (
-            <option value={place.id} key={place.id}>
-              {place.city}
-            </option>
-          );
-        })}
-    }
-
     placeChange(e,id,name,dateStart,dateEnd,ticketPrice,availableTickets){
         this.placeSelectionChanged(e);
         this.edit(id,name,dateStart,dateEnd,ticketPrice,availableTickets);
     }
-    placeSelectionChanged(e){
-        // console.log(e);
 
-        let placeId= e.target.value;
-        let place = this.state.places.find((placeDTO) => placeDTO.id == placeId);
-        console.log(place);
-
-        let festival = this.state.festival;
-        festival.place = place;
-
-        this.setState({festival : festival});
-        this.setState({placeId : placeId});
-                
-    }
-
-    nameInputChanged(e) {
-        let input = e.target;
+    searchValueInputChange(event) {
+        let control = event.target;
     
-        let name = input.name;
-        let value = input.value;
-
-        console.log(name + ", " + value);
-
-        name = this.state.name;
-
-        name = value;
-
-        this.setState({name : name})
-        this.search();
-        console.log(name);
+        let name = control.name;
+        let value = control.value;
+    
+        let search = this.state.search;
+        search[name] = value;
+    
+        this.setState({ search: search });
+        this.getFestivals(0);
       }
-
-      search() {
-        var params = {
-            'name' : this.state.name,
-            'placeId' : this.state.placeId
-        }
-
-        Axios.get('/festivals/search', {params})
-            .then(res => {
-                 // handle success
-                 console.log(res);
-                 this.setState({festivals : res.data});
-                 
-            })
-            .catch(error => {
-                // handle error
-                console.log(error);
-                alert('Error at searching');
-            });
-    }
 
     goToCreate(){
         this.props.history.push('/festivals/create');
     }
-
-
 
     delete(id) {
         Axios.delete('/festivals/' + id)
@@ -234,8 +191,7 @@ class Festival extends React.Component {
                 <Form>
                     <Form.Label  htmlFor="place">Place of event</Form.Label>
                     <InputGroup>
-                    <Form.Control as="select" id="place" name="placeId" onChange={(e)=> this.placeSelectionChanged(e)}
-                    onClick={e => this.search()}>
+                    <Form.Control as="select" id="place" name="placeId" onChange={(e)=> this.searchValueInputChange(e)}>
                        <option value={-1}></option>
                          {this.state.places.map((place) => {
                          return (
@@ -249,14 +205,15 @@ class Festival extends React.Component {
                     </InputGroup>
 
                     <Form.Label htmlFor="name">Name</Form.Label>
-                    <Form.Control id="name" placeholder="name of festival" name="name" onChange={e=> this.nameInputChanged(e)}></Form.Control>
+                    <Form.Control id="name" placeholder="name of festival" name="name" onChange={e=> this.searchValueInputChange(e)}></Form.Control>
                 </Form>
                 <br/>
             </div>
              
              <Button variant="success" onClick={(e) => this.goToCreate()}>Create festival</Button>
-             <div style={{float:"right"}}><Button disabled={this.state.pageNo==0} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo - 1)}>Previous</Button>
-                        <Button disabled={this.state.pageNo==this.state.totalPages-1} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo + 1)}>Next</Button>
+             <div style={{float:"right"}}>
+                        <Button disabled={this.state.pageNo==0} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo = this.state.pageNo - 1)}>Previous</Button>
+                        <Button disabled={this.state.pageNo==this.state.totalPages-1} className="btn btn-primary" onClick={() =>this.getFestivals(this.state.pageNo = this.state.pageNo + 1)}>Next</Button>
   </div>
             <Table className="table table-striped" style={{marginTop:5}}>
                 <thead className="thead-dark">

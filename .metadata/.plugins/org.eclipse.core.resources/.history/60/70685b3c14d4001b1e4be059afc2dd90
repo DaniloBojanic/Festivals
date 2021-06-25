@@ -3,6 +3,7 @@ package finale.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -59,17 +60,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		httpSecurity.headers().cacheControl().disable();
 		httpSecurity.cors();
 		httpSecurity
-				.csrf().disable()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and().authorizeRequests().anyRequest().permitAll();
-//				.and()
-//				.authorizeRequests()
-//				.antMatchers(HttpMethod.POST, "/api/korisnici/auth")
-//					.permitAll()
-//				 .antMatchers(HttpMethod.GET, "/api/zadaci")
-//					 .permitAll()
-//				.anyRequest().authenticated();
+		.csrf().disable()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/api/festivals")
+			.permitAll()
+			.antMatchers(HttpMethod.GET, "/api/places")
+			.permitAll()
+		.antMatchers(HttpMethod.POST, "/api/users/auth")
+			.permitAll()
+		.antMatchers(HttpMethod.POST, "/api/users")
+			.permitAll()
+	
+		.anyRequest().authenticated();
 
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),

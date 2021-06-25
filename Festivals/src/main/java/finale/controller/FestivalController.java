@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,15 +42,17 @@ public class FestivalController {
 	
 //	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	@GetMapping
-	public ResponseEntity<List<FestivalDTO>> getAll(@RequestParam(defaultValue = "0") int pageNo){
-		Page<Festival> svi = festivalService.findAll(pageNo);
+	public ResponseEntity<List<FestivalDTO>> getAll(@RequestParam(required=false) String name,
+			@RequestParam(required=false) Long placeId,
+			@RequestParam(defaultValue="0") int pageNo){
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Total-Pages", svi.getTotalPages() + "");
-		
-		return new ResponseEntity<>(toFestivalDTO.convert(svi.getContent()),HttpStatus.OK);
-		
-	}
+        Page<Festival> festPage = festivalService.search(name, placeId, pageNo);
+        
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Total-Pages", festPage.getTotalPages() + "");
+        
+        return new ResponseEntity<>(toFestivalDTO.convert(festPage.getContent()), responseHeaders, HttpStatus.OK);
+    }
 //		@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	 	@GetMapping(value="/{id}")
 		public ResponseEntity<FestivalDTO> getById(@PathVariable Long id){
@@ -101,11 +102,5 @@ public class FestivalController {
 	 	 		}
 	 	 		
 	 	 	}
-		 
-		 @GetMapping(value="/search")
-		 public ResponseEntity<List<FestivalDTO>> search(@RequestParam(required=false) Long placeId,@RequestParam(required=false) String name){
-			 List<Festival> rezultat = festivalService.find(placeId, name);
-			 
-			 return new ResponseEntity<>(toFestivalDTO.convert(rezultat),HttpStatus.OK);
-		 }
+	
 }

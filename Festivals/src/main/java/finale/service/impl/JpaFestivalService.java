@@ -1,6 +1,5 @@
 package finale.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +54,7 @@ public class JpaFestivalService implements FestivalService{
 	}
 
 	@Override
-	public List<Festival> find(Long placeId, String name) {
-		if(placeId == null) {
-			return festivalRepository.findByNameIgnoreCaseContains(name);
-		}
-		
-		if(name == null) {
-			name = "";
-		}
-		return festivalRepository.findByPlaceIdAndNameIgnoreCaseContains(placeId, name);
+	public Page<Festival> search(String name, Long placeId, int pageNo) {
+		return festivalRepository.search(name, placeId, PageRequest.of(pageNo, 2));
 	}
 }
